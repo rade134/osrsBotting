@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 /**
  * Created by Jayden on 4/27/2015.
  */
-public class closeBank extends Task<ClientContext> {
+public class CloseBank extends Task<ClientContext> {
 
     private int[] ids = {331,335};
 
@@ -19,16 +19,16 @@ public class closeBank extends Task<ClientContext> {
         }
     };
 
-    public closeBank (ClientContext ctx) {
+    public CloseBank(ClientContext ctx) {
         super( ctx );
     }
 
-    public closeBank (ClientContext ctx, Callable<Boolean> cond) {
+    public CloseBank(ClientContext ctx, Callable<Boolean> cond) {
         super( ctx );
         this.cond = cond;
     }
 
-    public closeBank (ClientContext ctx, int[] ids) {
+    public CloseBank(ClientContext ctx, int[] ids) {
         super( ctx );
         this.ids = ids;
     }

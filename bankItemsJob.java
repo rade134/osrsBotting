@@ -11,31 +11,30 @@ import java.util.List;
 /**
  * Created by Jayden on 4/27/2015.
  */
-public class bankItemsJob extends Task<ClientContext> {
+public class BankItemsJob extends Task<ClientContext> {
 
     private int[] ids = {331,335};
-    private List<Task> taskList = new ArrayList<Task>();
     public Area bankArea = new Area(new Tile(3205,3211,2),new Tile(3212,3225,2));
 
     private void addTasks () {
-        taskList.addAll(Arrays.asList(new openBank(ctx), new depositAllItem(ctx,ids), new closeBank(ctx)));
+        taskList.addAll(Arrays.asList(new OpenBank(ctx), new DepositAllItem(ctx,ids), new CloseBank(ctx)));
     }
-    public bankItemsJob (ClientContext ctx) {
+    public BankItemsJob(ClientContext ctx) {
         super( ctx );
         addTasks();
     }
-    public bankItemsJob (ClientContext ctx, Area bankArea) {
+    public BankItemsJob(ClientContext ctx, Area bankArea) {
         super(ctx);
         this.bankArea = bankArea;
         addTasks();
     }
-    public bankItemsJob (ClientContext ctx, Area bankArea, int[] ids) {
+    public BankItemsJob(ClientContext ctx, Area bankArea, int[] ids) {
         super(ctx);
         this.bankArea = bankArea;
         addTasks();
         this.ids = ids;
     }
-    public bankItemsJob (ClientContext ctx,  int[] ids) {
+    public BankItemsJob(ClientContext ctx, int[] ids) {
         super(ctx);
         addTasks();
         this.ids = ids;
@@ -43,18 +42,6 @@ public class bankItemsJob extends Task<ClientContext> {
 
     public boolean activate() {
         return bankArea.contains(ctx.players.local());
-    }
-
-    public void execute() {
-        for (Task task : taskList) {
-            try {
-                if (task.activate()) {
-                    task.execute();
-                }
-            } catch (Exception e) {
-                methodClass.printErrors(e);
-            }
-        }
     }
 
 }

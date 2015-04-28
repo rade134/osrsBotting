@@ -11,18 +11,25 @@ import java.util.concurrent.Callable;
  Will deposit a list of items,
  if no items specified will deposit entire inventory
  */
-public class depositAllItem extends Task<ClientContext> {
+public class DepositAllItem extends Task<ClientContext> {
     private int[] ids;
     private Integer amount;
 
-    public depositAllItem (ClientContext ctx) {
+
+
+
+
+
+
+
+    public DepositAllItem(ClientContext ctx) {
         super (ctx);
     }
-    public depositAllItem (ClientContext ctx, int[] ids) {
+    public DepositAllItem(ClientContext ctx, int[] ids) {
         super (ctx);
         this.ids = ids;
     }
-    public depositAllItem (ClientContext ctx, int[] ids,int amount) {
+    public DepositAllItem(ClientContext ctx, int[] ids, int amount) {
         super (ctx);
         this.ids = ids;
         this.amount = amount;
@@ -37,15 +44,15 @@ public class depositAllItem extends Task<ClientContext> {
 
     }
     public void execute() {
-
-        if (ids == null) {
+        if (ids != null) {
             for (final int id : ids) {
-                if (amount == null) {
+                final int lastAmount = ctx.inventory.id(id).count();
+                if (amount != null) {
                     if (ctx.bank.deposit(id, amount)) {
                         Condition.wait(new Callable<Boolean>() {
                             @Override
                             public Boolean call() {
-                                return ctx.inventory.id(id).count() == 0;
+                                return ctx.inventory.id(id).count() == (lastAmount - amount);
                             }
                         });
                     }

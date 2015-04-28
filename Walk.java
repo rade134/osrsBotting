@@ -48,10 +48,16 @@ public class Walk extends Task<ClientContext> {
         ctx.camera.turnTo(obj);
         return obj;
     }
+    protected void run() {
+        if (ctx.movement.energyLevel() > 20) {
+            ctx.movement.running(true);
+        }
+    }
 
     public void execute(){
         if (areaToArrive != null) {
             ctx.movement.step(areaToArrive.getClosestTo(ctx.players.local()));
+            run();
         }
     }
 }

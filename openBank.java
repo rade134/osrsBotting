@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 
 /* Default: opens bank if there is salmon or trout in your inventory
 *  and you are in the bank area.*/
-public class openBank extends Task<ClientContext> {
+public class OpenBank extends Task<ClientContext> {
 
     private int[] boothIds = {18491,3227};
 
@@ -25,13 +25,13 @@ public class openBank extends Task<ClientContext> {
         }
     };
 
-    public openBank (ClientContext ctx) {
+    public OpenBank(ClientContext ctx) {
         super(ctx);
     }
 
     /*opens the bank under a specific condition
     or if you're in a specific bankArea */
-    public openBank (ClientContext ctx, Callable<Boolean> cond) {
+    public OpenBank(ClientContext ctx, Callable<Boolean> cond) {
         super(ctx);
         this.cond = cond;
 
@@ -39,7 +39,7 @@ public class openBank extends Task<ClientContext> {
 
     /*opens the bank if you have specific item ids in your invent
         or you're in a specific bankArea */
-    public openBank (ClientContext ctx, int[] ids) {
+    public OpenBank(ClientContext ctx, int[] ids) {
         super(ctx);
         this.ids = ids;
 
