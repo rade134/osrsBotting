@@ -64,7 +64,7 @@ public class DrawBottingSummary {
         return hours + ":"+ minut + ":" + second;
     }
 
-    private DrawPaint newPaint = new DrawPaint(ctx,10,10);
+    private DrawPaint newPaint;
     public DrawBottingSummary(ClientContext ctx) throws Exception {
         this.ctx = ctx;
         setupText();
@@ -79,6 +79,7 @@ public class DrawBottingSummary {
         updateSummary();
     }
     public void setupText() throws Exception{
+        newPaint = new DrawPaint(ctx,10,10);
         newPaint.addText(getCurLevel);
         newPaint.addText(getExpToLevel);
         newPaint.addText(getExpPerHour);
