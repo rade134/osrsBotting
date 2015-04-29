@@ -1,0 +1,67 @@
+package fishing;
+
+import org.powerbot.script.Condition;
+import org.powerbot.script.rt4.ClientContext;
+import org.powerbot.script.rt4.GameObject;
+
+import java.util.concurrent.Callable;
+
+/**
+ * Created by Jayden on 4/27/2015.
+ */
+
+/* Default: opens bank if there is salmon or trout in your inventory
+*  and you are in the bank area.*/
+public class OpenBank extends Task<ClientContext> {
+
+    private int[] boothIds = {18491,3227};
+
+    private int[] ids = {331,335};
+
+    private Callable<Boolean> cond = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return ctx.inventory.id(ids).count() != 0;
+        }
+    };
+
+    public OpenBank(ClientContext ctx) {
+        super(ctx);
+    }
+
+    /*opens the bank under a specific condition
+    or if you're in a specific bankArea */
+    public OpenBank(ClientContext ctx, Callable<Boolean> cond) {
+        super(ctx);
+        this.cond = cond;
+
+    }
+
+    /*opens the bank if you have specific item ids in your invent
+        or you're in a specific bankArea */
+    public OpenBank(ClientContext ctx, int[] ids) {
+        super(ctx);
+        this.ids = ids;
+
+    }
+    public boolean activate() throws Exception {
+        System.out.println("Open bank task: " + cond.call());
+
+        return cond.call() && !ctx.bank.opened();
+    }
+    public void execute() {
+        System.out.println("Opening Bank");
+        ctx.objects.select().id(boothIds);
+        GameObject bankNPC = ctx.objects.nearest().poll();
+        ctx.camera.turnTo(bankNPC);
+        if (bankNPC.interact(false, "Bank")) {
+            Condition.wait(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return ctx.bank.opened();
+                }
+            });
+        }
+    }
+
+}
