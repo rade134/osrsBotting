@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 public class WithdrawAllItem extends Task<ClientContext> {
     private int[] ids;
     private Integer amount;
+    private Callable<Boolean> cond;
 
     public WithdrawAllItem(ClientContext ctx) {
         super (ctx);
@@ -22,14 +23,51 @@ public class WithdrawAllItem extends Task<ClientContext> {
         super (ctx);
         this.ids = ids;
     }
+    public WithdrawAllItem(ClientContext ctx, int ids) {
+        super (ctx);
+        this.ids = new int[]  {ids};
+    }
+    public WithdrawAllItem(ClientContext ctx, int[] ids, Callable<Boolean> cond) {
+        super (ctx);
+        this.ids = ids;
+        this.cond = cond;
+    }
+    public WithdrawAllItem(ClientContext ctx, int ids, Callable<Boolean> cond) {
+        super (ctx);
+        this.ids = new int[]  {ids};
+        this.cond = cond;
+    }
     public WithdrawAllItem(ClientContext ctx, int[] ids, int amount) {
         super (ctx);
         this.ids = ids;
         this.amount = amount;
     }
+    public WithdrawAllItem(ClientContext ctx, int ids, int amount) {
+        super (ctx);
+        this.ids = new int[] {ids};
+        this.amount = amount;
+    }
+    public WithdrawAllItem(ClientContext ctx, int[] ids, int amount, Callable<Boolean> cond) {
+        super (ctx);
+        this.ids = ids;
+        this.amount = amount;
+        this.cond = cond;
+    }
+    public WithdrawAllItem(ClientContext ctx, int ids, int amount, Callable<Boolean> cond) {
+        super (ctx);
+        this.ids = new int[] {ids};
+        this.amount = amount;
+        this.cond = cond;
+    }
 
-    public boolean activate() {
-            return ctx.inventory.select().count() < 28 && ctx.bank.opened() && ctx.bank.id(ids).count() != 0;
+    public boolean activate() throws Exception {
+
+        boolean test = ctx.inventory.select().count() < 28 && ctx.bank.opened() && cond.call();
+            System.out.println("id "+ ids[0]);
+            System.out.println("bank open: " + ctx.bank.opened());
+            System.out.println("id count: " + ctx.bank.id(ids).count());
+            System.out.println("cond.call() : " + cond.call());
+            return test;
     }
     public void execute() {
 

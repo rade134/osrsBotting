@@ -21,6 +21,11 @@ public class DrawPaint {
         this.x = x;
         this.y = y;
     }
+    public DrawPaint(int x, int y, Font font) {
+        this.font = font;
+        this.x = x;
+        this.y = y;
+    }
 
     public void addText(final String string) {
         Callable<String> stringReturn = new Callable<String>() {

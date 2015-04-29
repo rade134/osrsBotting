@@ -45,9 +45,12 @@ public class OpenBank extends Task<ClientContext> {
 
     }
     public boolean activate() throws Exception {
+        System.out.println("Open bank task: " + cond.call());
+
         return cond.call() && !ctx.bank.opened();
     }
     public void execute() {
+        System.out.println("Opening Bank");
         ctx.objects.select().id(boothIds);
         GameObject bankNPC = ctx.objects.nearest().poll();
         ctx.camera.turnTo(bankNPC);

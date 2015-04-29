@@ -4,19 +4,31 @@ import org.powerbot.script.rt4.ClientContext;
 import org.powerbot.script.Tile;
 import org.powerbot.script.Area;
 
+import java.util.concurrent.Callable;
+
 public class WalkLumbyBank extends Walk {
     private int[] stairs = {16671,16672};
     public Area lumbyBankArea = new Area(new Tile(3205,3211,2),new Tile(3212,3225,2));
+    Callable<Boolean> cond = new Callable<Boolean>() {
+        @Override
+        public Boolean call() throws Exception {
+            return ctx.inventory.select().count() == 28;
+        }
+    };
 
     public WalkLumbyBank(ClientContext ctx) {
         super(ctx);
     }
+    public WalkLumbyBank(ClientContext ctx, Callable<Boolean> cond) {
+        super(ctx);
+        this.cond = cond;
+    }
 
     @Override
-    public boolean activate() {
+    public boolean activate() throws Exception{
         if (s == State.finished) s = State.walk1;
 
-        if (ctx.inventory.select().count() == 28 && !lumbyBankArea.contains(ctx.players.local())) {
+        if (cond.call() && !lumbyBankArea.contains(ctx.players.local())) {
             return true;
         }else{
             s = State.walk1;

@@ -55,6 +55,7 @@ public class Walk extends Task<ClientContext> {
     }
 
     public void execute(){
+        System.out.println("Walking");
         if (areaToArrive != null) {
             ctx.movement.step(areaToArrive.getClosestTo(ctx.players.local()));
             run();
