@@ -64,7 +64,7 @@ public class DrawBottingSummary {
         return hours + ":"+ minut + ":" + second;
     }
 
-    private DrawPaint newPaint = new DrawPaint(10,10);
+    private DrawPaint newPaint = new DrawPaint(ctx,10,10);
     public DrawBottingSummary(ClientContext ctx) throws Exception {
         this.ctx = ctx;
         setupText();

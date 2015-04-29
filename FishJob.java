@@ -10,17 +10,26 @@ import java.util.concurrent.Callable;
  */
 public class FishJob extends Task<ClientContext> {
     Callable<Boolean> cond;
-    public FishJob(ClientContext ctx, Callable<Boolean> cond) {
+    boolean drop;
+    public FishJob(ClientContext ctx, Callable<Boolean> cond,boolean drop) {
         super(ctx);
         this.cond = cond;
+        this.drop = drop;
         addTasks();
     }
     private void addTasks() {
-        taskList.addAll(Arrays.asList(new WalkLumbyBank(ctx),
-                new WalkLumbyFish(ctx),
-                new BankItemsJob(ctx),
-                new Fish(ctx)
-        ));
+        if (drop) {
+            taskList.addAll(Arrays.asList(new WalkLumbyFish(ctx),
+                    new Drop(ctx),
+                    new Fish(ctx)
+            ));
+        }else{
+            taskList.addAll(Arrays.asList(new WalkLumbyBank(ctx),
+                    new BankItemsJob(ctx),
+                    new WalkLumbyFish(ctx),
+                    new Fish(ctx)
+            ));
+        }
     }
     public boolean activate() throws Exception{
         return !cond.call();

@@ -188,6 +188,61 @@ public class GrandExchange {
 
         return itemBought;
     }
+    public boolean buyItem(final String name) throws Exception {
+        boolean itemBought = true;
+        //
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickBuy();
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return buySellWindowOpen();
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return typeGEInput(name);
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickSearchItem();
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickConfirm();
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickNonCompleted(name);
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickReceive(0);
+            }
+        });
+        itemBought = itemBought && Condition.wait(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception{
+                return clickReceive(1);
+            }
+        });
+
+
+        return itemBought;
+    }
     public boolean isItemCompleted(int id) throws Exception {
         if (id < 0 || id > 5) throw new Exception("Select a ge offer within 1-6");
         return geWidget.component(6+id).component(23).textColor() == 24320;

@@ -3,6 +3,7 @@ package fishing;
 import org.powerbot.script.*;
 import org.powerbot.script.rt4.ClientContext;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class PowerFisher extends PollingScript<ClientContext> implements PaintLi
     private Callable<Boolean> buyFeathersCond = new Callable<Boolean>() {
         @Override
         public Boolean call() throws Exception {
-            return ctx.inventory.id(feathers).count() == 0 || grandExchangeArea.contains(ctx.players.local());
+            return ctx.inventory.select().id(feathers).count() == 0 || grandExchangeArea.contains(ctx.players.local());
         }
     };
 
@@ -38,7 +39,15 @@ public class PowerFisher extends PollingScript<ClientContext> implements PaintLi
                 new Fish(ctx),
                 new Walk(ctx,grandExchangeArea,buyFeathersCond)
         ));*/
-        taskList.addAll(Arrays.asList(new FishJob(ctx,buyFeathersCond), new NoFeathersJob(ctx,buyFeathersCond,grandExchangeArea,bankArea)));
+        // run startup GUI
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StartupGUI g = new StartupGUI();
+                g.setVisible(true);
+            }
+        });
+        taskList.addAll(Arrays.asList(new FishJob(ctx,buyFeathersCond,true), new NoFeathersJob(ctx,buyFeathersCond,grandExchangeArea,bankArea)));
 
         try {
             drawSummary = new DrawBottingSummary(ctx);
